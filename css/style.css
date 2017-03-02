@@ -1,0 +1,30 @@
+body {
+  font-family: "Lato", sans-serif;
+  margin: 70px 0px;
+  background: #0069D6;
+}
+
+.divider {
+  width: 100px;
+  height: 2px;
+  background: #ffA500;
+  margin: 0 auto;
+}
+
+.heading {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.heading h2 {
+  text-transform: uppercase;
+  font-weight: bold;
+  color: white;
+}
+
+#contact-form {
+  font-size: 20px;
+  background: white;
+  padding: 40px;
+  border-radius: 10px;
+}
