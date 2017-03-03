@@ -16,13 +16,29 @@
     }
 
     if(empty($name)) {
-      $nameError = " Et oui je veux tout savoir, même ton nom !";
+      $nameError = " Et oui je veux tout savoir de toi, même ton nom !";
     }
 
     if(empty($message)) {
       $messageError = " Je veux recevoir quelque chose quand même !";
     }
 
+    if(!isEmail($email)) {
+      $emailError = " Tu essayes de me rouler? C'est pas un email ça !";
+    }
+
+    if(!isPhone($phone)) {
+      $phoneError = " Que des chiffres et des espaces stp...";
+    }
+
+  }
+
+  function isPhone($var) {
+    return preg_match("/^[0-9 ]*$/", $var);
+  }
+
+  function isEmail($var) {
+    return filter_var($var, FILTER_VALIDATE_EMAIL);
   }
 
   function verifyInput($var) {
@@ -76,13 +92,13 @@
               <div class="col-md-6">
                 <label for="email">Email <span class="blue">*</span></label>
                 <input id="email" type="email" name="email" class="form-control" placeholder="Votre email" value="<?php echo $email; ?>">
-                <p class="comments">Message d'erreur</p>
+                <p class="comments"> <?php echo $emailError;?> </p>
               </div>
               <!-- Téléphone -->
               <div class="col-md-6">
                 <label for="phone">Téléphone</label>
                 <input id="phone" type="tel" name="phone" class="form-control" placeholder="Votre numéro de téléphone" value="<?php echo $phone; ?>">
-                <p class="comments">Message d'erreur</p>
+                <p class="comments"> <?php echo $phoneError;?> </p>
               </div>
               <!-- Message -->
               <div class="col-md-12">
