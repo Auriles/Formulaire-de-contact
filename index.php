@@ -2,6 +2,7 @@
 
   $firstname = $name = $email = $phone = $message = "";
   $firstnameError = $nameError = $emailError = $phoneError = $messageError = "";
+  $isSuccess = false;
 
 
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -10,26 +11,36 @@
     $email = verifyInput($_POST["email"]);
     $phone = verifyInput($_POST["phone"]);
     $message = verifyInput($_POST["message"]);
+    $isSuccess = true;
 
     if(empty($firstname)) {
       $firstnameError = " Je veux connaitre ton prénom !";
+      $isSuccess = false;
     }
 
     if(empty($name)) {
       $nameError = " Et oui je veux tout savoir de toi, même ton nom !";
+      $isSuccess = false;
     }
 
     if(empty($message)) {
       $messageError = " Je veux recevoir quelque chose quand même !";
+      $isSuccess = false;
     }
 
     if(!isEmail($email)) {
       $emailError = " Tu essayes de me rouler? C'est pas un email ça !";
+      $isSuccess = false;
     }
 
     if(!isPhone($phone)) {
       $phoneError = " Que des chiffres et des espaces stp...";
+      $isSuccess = false;
     }
+
+    // if(isSuccess) {
+    //   // Envoi de l'email
+    // }
 
   }
 
@@ -116,7 +127,7 @@
               </div>
             </div>
             <!-- Remerciements -->
-            <p class="thank-you">Votre message à bien été envoyé. Merci de m'avoir contacté ! </p>
+            <p class="thank-you" style="display:<?php if($isSuccess) echo 'block'; else echo 'none'; ?>">Votre message à bien été envoyé. Merci de m'avoir contacté ! </p>
           </form>
         </div>
       </div>
