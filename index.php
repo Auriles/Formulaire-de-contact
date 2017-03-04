@@ -63,8 +63,6 @@
                 <input type="submit" class="button1" value="Envoyer">
               </div>
             </div>
-            <!-- Remerciements -->
-            <!-- <p class="thank-you" style="display:none">Votre message à bien été envoyé. Merci de m'avoir contacté ! </p> -->
           </form>
         </div>
       </div>

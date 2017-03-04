@@ -1,77 +1,76 @@
 <?php
 
-  $firstname = $name = $email = $phone = $message = "";
-  $firstnameError = $nameError = $emailError = $phoneError = $messageError = "";
-  $isSuccess = false;
-  $emailTo = "auriles0404@gmail.com";
+    $array = array("firstname" => "", "name" => "", "email" => "", "phone" => "", "message" => "", "firstnameError" => "", "nameError" => "", "emailError" => "", "phoneError" => "", "messageError" => "", "isSuccess" => false);
+    $emailTo = "auriles0404@gmail.com";
 
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $array["firstname"] = test_input($_POST["firstname"]);
+        $array["name"] = test_input($_POST["name"]);
+        $array["email"] = test_input($_POST["email"]);
+        $array["phone"] = test_input($_POST["phone"]);
+        $array["message"] = test_input($_POST["message"]);
+        $array["isSuccess"] = true;
+        $emailText = "";
 
-  if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $firstname = verifyInput($_POST["firstname"]);
-    $name = verifyInput($_POST["name"]);
-    $email = verifyInput($_POST["email"]);
-    $phone = verifyInput($_POST["phone"]);
-    $message = verifyInput($_POST["message"]);
-    $isSuccess = true;
-    $emailText = "";
+        if (empty($array["firstname"])) {
+            $array["firstnameError"] = "Je veux connaitre ton prénom !";
+            $array["isSuccess"] = false;
+        } else {
+            $emailText .= "Firstname: {$array['firstname']}\n";
+        }
 
-    if(empty($firstname)) {
-      $firstnameError = " Je veux connaitre ton prénom !";
-      $isSuccess = false;
-    } else {
-      $emailText .= "FirstName : $firstname\n";
+        if (empty($array["name"])) {
+            $array["nameError"] = "Et oui je veux tout savoir. Même ton nom !";
+            $array["isSuccess"] = false;
+        } else {
+            $emailText .= "Name: {$array['name']}\n";
+        }
+
+        if(!isEmail($array["email"])) {
+            $array["emailError"] = "T'essaies de me rouler ? C'est pas un email ça  !";
+            $array["isSuccess"] = false;
+        } else {
+            $emailText .= "Email: {$array['email']}\n";
+        }
+
+        if (!isPhone($array["phone"])) {
+            $array["phoneError"] = "Que des chiffres et des espaces, stp...";
+            $array["isSuccess"] = false;
+        } else {
+            $emailText .= "Phone: {$array['phone']}\n";
+        }
+
+        if (empty($array["message"])) {
+            $array["messageError"] = "Qu'est-ce que tu veux me dire ?";
+            $array["isSuccess"] = false;
+        } else {
+            $emailText .= "Message: {$array['message']}\n";
+        }
+
+        if($array["isSuccess"]) {
+            $headers = "From: {$array['firstname']} {$array['name']} <{$array['email']}>\r\nReply-To: {$array['email']}";
+            mail($emailTo, "Un message de votre site", $emailText, $headers);
+        }
+
+        echo json_encode($array);
+
     }
 
-    if(empty($name)) {
-      $nameError = " Et oui je veux tout savoir de toi, même ton nom !";
-      $isSuccess = false;
-    } else {
-      $emailText .= "Name : $name\n";
+    function isEmail($email) {
+        return filter_var($email, FILTER_VALIDATE_EMAIL);
     }
 
-    if(!isEmail($email)) {
-      $emailError = " Tu essayes de me rouler? C'est pas un email ça !";
-      $isSuccess = false;
-    } else {
-      $emailText .= "Email : $email\n";
+    function isPhone($phone) {
+        return preg_match("/^[0-9 ]*$/",$phone);
     }
 
-    if(!isPhone($phone)) {
-      $phoneError = " Que des chiffres et des espaces stp...";
-      $isSuccess = false;
-    } else {
-      $emailText .= "Phone : $phone\n";
+    function test_input($data) {
+      $data = trim($data);
+      $data = stripslashes($data);
+      $data = htmlspecialchars($data);
+      return $data;
     }
-
-    if(empty($message)) {
-      $messageError = " Je veux recevoir quelque chose quand même !";
-      $isSuccess = false;
-    } else {
-      $emailText .= "Message : $message\n";
-    }
-
-    if($isSuccess) {
-      $headers = "From: $firstname $name <$email>\r\nReply-To: $email";
-      mail($emailTo, "Un message de votre site", $emailText, $headers);
-      $firstname = $name = $email = $phone = $message = "";
-    }
-
-  }
-
-  function isPhone($var) {
-    return preg_match("/^[0-9 ]*$/", $var);
-  }
-
-  function isEmail($var) {
-    return filter_var($var, FILTER_VALIDATE_EMAIL);
-  }
-
-  function verifyInput($var) {
-    $var = trim($var);
-    $var = stripslashes($var);
-    $var = htmlspecialchars($var);
-
-    return $var;
-  }
 
 ?>
+
+
